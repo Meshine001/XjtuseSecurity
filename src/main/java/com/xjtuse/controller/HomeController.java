@@ -1,4 +1,4 @@
-package com.xjtuse.security;
+package com.xjtuse.controller;
 
 import java.text.DateFormat;
 import java.util.Date;

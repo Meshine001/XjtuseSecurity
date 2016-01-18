@@ -1,8 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-		
+	
+	<!-- Upload File -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<property name="maxUploadSize" value="-1"></property>
+	</bean>
+	
+	<!-- 属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+	<!--sessionFactory的定义-->  
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">  
+        <!--注入数据源-->  
+        <property name="dataSource" ref="dataSource"/>  
+        <property name="packagesToScan" value="com.xjtuse.entity" />  
+        <property name="hibernateProperties">  
+            <props>  
+                <prop key="hibernate.dialect">${database.dialect}</prop>  
+                <prop key="hibernate.show_sql">true</prop>  
+                <prop key="hibernate.format_sql">true</prop>  
+                <prop key="hibernate.hbm2ddl.auto">update</prop>  
+            </props>  
+        </property>  
+    </bean>  
+    <!--数据源的配置，使用c3p0-->  
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+        <property name="driverClass" value="${database.driverClass}"/>  
+        <property name="jdbcUrl" value="${database.jdbcUrl}"/>  
+        <property name="user" value="${database.user}"/>  
+        <property name="password" value="${database.password}"/>  
+        <property name="maxPoolSize" value="80"/>  
+        <property name="minPoolSize" value="10"/>  
+        <property name="initialPoolSize" value="1"/>  
+        <property name="maxIdleTime" value="20"/>  
+    </bean>  
+    <!--事务管理的配置-->  
+    <bean id="transactionManager"  
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">  
+        <property name="sessionFactory" ref="sessionFactory" />  
+    </bean>   
+     <bean id="transactionInterceptor"   
+        class="org.springframework.transaction.interceptor.TransactionInterceptor">   
+        <property name="transactionManager" ref="transactionManager" />   
+        <!-- 配置事务属性 -->   
+        <property name="transactionAttributes">   
+            <props>   
+                <prop key="save*">PROPAGATION_REQUIRED</prop>  
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>  
+                <prop key="create*">PROPAGATION_REQUIRED</prop>  
+                <prop key="update*">PROPAGATION_REQUIRED</prop>  
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>  
+                <prop key="remove*">PROPAGATION_REQUIRED</prop>           
+                <prop key="batch*">PROPAGATION_REQUIRED</prop>  
+                <prop key="execute*">PROPAGATION_REQUIRED</prop>  
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>  
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>  
+                <prop key="query*">PROPAGATION_REQUIRED,readOnly</prop>  
+                <prop key="search*">PROPAGATION_REQUIRED,readOnly</prop>   
+            </props>   
+        </property>   
+    </bean>  
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">  
+        <property name="beanNames">   
+            <list>   
+                <!--所有名字以ServiceImpl结尾的bean自动配置事务-->  
+                <!--因为我们是以注解的方式实现的，默认bean的名字就是类的名称-->  
+                <!--平时我们以xml方式配置时，一般给以Service结尾-->  
+                <value>*ServiceImpl</value>  
+            </list>   
+        </property>   
+        <property name="interceptorNames">   
+            <list>   
+                <value>transactionInterceptor</value>   
+            </list>   
+        </property>   
+    </bean>  
+    
+
+	
 </beans>
