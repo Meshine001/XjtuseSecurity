@@ -1,4 +1,4 @@
-package com.xjtuse.security.model;
+package com.xjtuse.model;
 
 import java.util.Calendar;
 import java.util.Date;

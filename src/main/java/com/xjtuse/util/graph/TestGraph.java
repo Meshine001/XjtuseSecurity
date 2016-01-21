@@ -1,12 +1,14 @@
-package com.xjtuse.security.util.graph;
+package com.xjtuse.util.graph;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.xjtuse.security.model.MyDate;
-import com.xjtuse.security.model.Staff;
+import com.xjtuse.model.MyDate;
+import com.xjtuse.model.Staff;
+
+
 
 public class TestGraph {
 	public static void main(String[] args) {

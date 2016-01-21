@@ -1,4 +1,4 @@
-package com.xjtuse.security.util;
+package com.xjtuse.util;
 
 import java.util.List;
 
