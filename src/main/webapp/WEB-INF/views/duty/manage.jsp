@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
      pageEncoding="UTF-8"%>
+     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  <%
  String path = request.getContextPath();
  String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -8,7 +9,7 @@
  <html>
    <head>
      <base href="<%=basePath%>">    
-     <title>标题</title>        
+     <title></title>        
    <meta http-equiv="pragma" content="no-cache">
    <meta http-equiv="cache-control" content="no-cache">
    <meta http-equiv="expires" content="0">    
@@ -16,9 +17,17 @@
    <meta http-equiv="description" content="This is my page">
   </head>
   <body>
-  	<form action="./duty/init" method="post" enctype="multipart/form-data">
-  		<input type="file" name="upload">
-  		<input type="submit">
-  	</form>
+  	<table >
+  		<thead>
+  			<tr>Name</tr>
+  		</thead>
+  		<tbody>
+  			<c:forEach items="${students}" var="stuent">
+  				<tr>${stuent.name}</tr>
+  			</c:forEach>
+  		</tbody>
+  	</table>
+  	<button>Manual</button><br>
+  	<button>Auto</button>
   </body>
  </html>

@@ -7,7 +7,7 @@
 <title>权限验证</title>
 </head>
 <body>
-	<form action="./duty/validate" method="post" enctype="application/x-www-form-urlencoded">
+	<form action="/security/duty/validate" method="post" enctype="application/x-www-form-urlencoded">
 		Please input security code:<input type="password" name="securityCode">
 		<input type="submit" value="Comfirm">
 	</form>

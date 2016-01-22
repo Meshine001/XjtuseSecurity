@@ -4,19 +4,13 @@ import java.util.List;
 
 public class Assign{
 	List staff;
+	List Date;
 	int sum;
-
 	
 	
-	Assign(List staff){
+	public Assign(List staff,List Date){
 		this.staff = staff;
 		this.sum = staff.size();
-	}
-	
-	
-	
-	public static void main(String args[]){
-		System.out.println("aaa");
 	}
 	
 }
