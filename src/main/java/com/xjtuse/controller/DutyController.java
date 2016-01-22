@@ -83,14 +83,38 @@ public class DutyController {
 			List<Student> students = studentService.getAllStudents();
 			//Need initialization
 			if(students.isEmpty()){
-				return "duty/init";
+				return "redirect:/duty/init";
 			}
 			model.addAttribute("students", students);
-			return "duty/manage";
+			return "redirect:/duty/manage";
 		}
 		
 		model.addAttribute("message", "Security Code is invalid!!!!");
 		return "home";
+	}
+	
+	/**
+	 * 跳转init
+	 * @return
+	 */
+	@RequestMapping(value = "/init", method = RequestMethod.GET)
+	public String init(){
+		return "duty/init";
+	}
+	/**
+	 * 跳转manage
+	 * @return
+	 */
+	@RequestMapping(value = "/manage", method = RequestMethod.GET)
+	public String manage(Model model){
+		List<Student> students = studentService.getAllStudents();
+		if(!students.isEmpty()){
+			for(Student s:students){
+				System.out.println(s);
+			}
+		}
+		model.addAttribute("students", students);
+		return "duty/manage";
 	}
 
 	@RequestMapping(value = "/init", method = RequestMethod.POST)
@@ -118,8 +142,8 @@ public class DutyController {
 						studentService.addStudent(new Student(name));
 					}
 				}
-				model.addAttribute("students", studentService.getAllStudents());
-				return "duty/manage";
+				
+				return "redirect:/duty/manage";
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
